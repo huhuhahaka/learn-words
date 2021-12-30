@@ -1,24 +1,26 @@
-# learn-words
+# 原版项目相关信息（强烈建议使用原版！）
 
-## Project setup
-```
-npm install
-```
+[原版 项目地址](https://qwerty.liumingye.cn/)
+[原版 GitHub地址](https://github.com/Kaiyiwing/qwerty-learner)
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
 
-### Compiles and minifies for production
-```
-npm run build
-```
 
-### Lints and fixes files
-```
-npm run lint
-```
+## 背单词
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+个人仿制项目，背单词自用
+数据来源是从原版项目里拷贝过来的，后续可能会 跟着原项目更新
+
+* 页面很丑，但功能基本都有
+* 利用 localStorage，存储英语等级进度信息 和 各等级单词进度信息，可手动调整单词进度
+* 简陋的 支持了一下移动设备
+
+跟原版一样 输入错误时自动清空，PC 设备使用时还好 锻炼了码字的准确性，
+但这个逻辑在移动设备上时，由于键盘小 中英文切换 首次输入时大写等问题，用户体验不好
+
+个人觉得
+PC 设备使用 偏练打字，
+移动设备使用 偏记单词，
+（后续 移动设备访问时，有可能增加，【上一个/下一个】按钮，为了更快速的过单词）
+
+[背单词 项目地址](http://huhuhahaka.cn/)
+
