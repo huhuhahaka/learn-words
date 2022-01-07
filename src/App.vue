@@ -45,6 +45,10 @@
       </p>
       <img src="./assets/qwerty.png" width="100" @click="openQwertyUrl" />
     </div>
+
+    <br />
+    <br />
+    <div v-html="example"></div>
   </div>
 </template>
 
@@ -81,6 +85,7 @@
     name: "App",
     data() {
       return {
+        example: "",
         showQwerty: true,
         wordObjects,
         words,
@@ -104,6 +109,12 @@
       },
     },
     methods: {
+      getExample() {
+        let word = this.words[this.wordIndex];
+        this.axios.get("http://huhuhahaka.cn:8082/example/" + word).then((response) => {
+          this.example = response.data;
+        });
+      },
       openQwertyUrl() {
         window.open("https://qwerty.liumingye.cn/");
       },
@@ -116,6 +127,7 @@
 
         this.setAboutWord(newWordIndex);
         this.playing();
+        this.getExample();
       },
       changeVoice() {
         this.playing();
@@ -140,6 +152,7 @@
           }
           this.setAboutWord(myWordIndex);
           this.playing();
+          this.getExample();
         });
       },
       async ready() {
@@ -170,6 +183,10 @@
           if (++this.charIndex >= this.chars.length) {
             this.text = "";
             let nextWordIndex = ++this.wordIndex;
+
+            //展示例句
+            this.getExample();
+
             if (nextWordIndex > this.words.length - 1) {
               this.reset(charElements);
               this.wordIndex = this.words.length - 1;
@@ -246,8 +263,11 @@
         return false;
       }
     },
-    watch: {},
+    watch: {
+
+    },
     mounted() {
+
     },
     created() {
       this.isShowInput();
@@ -273,6 +293,7 @@
 
         this.setAboutWord(myWordIndex);
 
+        this.getExample();
         document.onkeyup = (e) => {
           this.showTip = false;
 
