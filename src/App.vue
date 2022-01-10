@@ -111,7 +111,7 @@
     methods: {
       getExample() {
         let word = this.words[this.wordIndex];
-        this.axios.get("http://huhuhahaka.cn:8082/example/" + word).then((response) => {
+        this.axios.get("https://huhuhahaka.cn/example/" + word).then((response) => {
           this.example = response.data;
         });
       },
@@ -220,7 +220,7 @@
           .then(() => {
             let type = this.type;
             let word = this.words[this.wordIndex];
-            this.audioUrl = `http://dict.youdao.com/dictvoice?type=${type}&audio=${word}`;
+            this.audioUrl = `https://dict.youdao.com/dictvoice?type=${type}&audio=${word}`;
           })
           .then(() => {
             this.$refs.audio.play();
@@ -322,6 +322,7 @@
   }
 
   .char {
+    margin: 0 1px;
     font-size: 50px;
     color: lightgray;
   }
