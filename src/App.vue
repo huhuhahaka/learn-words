@@ -119,6 +119,9 @@
         window.open("https://qwerty.liumingye.cn/");
       },
       setWordIndex() {
+        let charElements = document.querySelectorAll("#checkArea .char");
+        this.reset(charElements);
+
         this.$refs.wordIndex.blur();
         let newWordIndex = this.wordIndex;
         if (newWordIndex < 0 || newWordIndex == "") {
