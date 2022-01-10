@@ -205,6 +205,9 @@
           }
         } else {
           this.text = "";
+          if (index > this.chars.length - 1) {
+            return;
+          }
           charElements[index].style.color = "red";
           setTimeout(() => {
             this.reset(charElements);
