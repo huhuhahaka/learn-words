@@ -8,7 +8,7 @@
       </span>
     </div>
     <h4 v-if="wordObject" class="phoneticSymbols">{{ wordObject.trans }}</h4>
-    <input v-if="showInput" type="text" v-model="text" />
+    <input v-if="showInput" type="text" v-model="text" :maxlength="charsLength" />
     <div>
       美音：<input type="radio" value="0" v-model="type" @change="changeVoice" />
       英音：<input type="radio" value="1" v-model="type" @change="changeVoice" />
@@ -107,6 +107,9 @@
       total() {
         return this.wordObjects.length;
       },
+      charsLength() {
+        return this.chars.length;
+      },
     },
     methods: {
       getExample() {
@@ -178,41 +181,42 @@
       //录入正确或错误 调整样式
       processing(index, rightOrWrong) {
         //todo 需要优化一下 不要每次输入都执行
-        var charElements = document.querySelectorAll("#checkArea .char");
+        let charElements = document.querySelectorAll("#checkArea .char");
 
-        if (rightOrWrong) {
-          charElements[index].style.color = "green";
-
-          if (++this.charIndex >= this.chars.length) {
-            this.text = "";
-            let nextWordIndex = ++this.wordIndex;
-
-            //展示例句
-            this.getExample();
-
-            if (nextWordIndex > this.words.length - 1) {
-              this.reset(charElements);
-              this.wordIndex = this.words.length - 1;
-              alert("恭喜练习完成!");
-              return;
+        if (this.showInput) {
+          // 手机端 文字校验样式处理
+          let tempText = this.text;
+          let tempTextChars = tempText.split("");
+          charElements.forEach((e, index) => {
+            if (index < tempText.length) {
+              if (tempTextChars[index] == this.chars[index]) {
+                e.style.color = "green";
+              } else {
+                e.style.color = "red";
+              }
+            } else {
+              e.style.color = "lightgray";
             }
+          });
 
-            setTimeout(() => {
-              this.reset(charElements);
-              this.setAboutWord(nextWordIndex);
-              this.playing();
-            }, 500);
+          if (tempText == this.wordObjects[this.wordIndex].name) {
+            this.nextWord(charElements);
           }
         } else {
-          this.text = "";
-          if (index > this.chars.length - 1) {
-            return;
+          if (rightOrWrong) {
+            charElements[index].style.color = "green";
+
+            this.nextWord(charElements);
+          } else {
+            if (index > this.chars.length - 1) {
+              return;
+            }
+            charElements[index].style.color = "red";
+            setTimeout(() => {
+              this.reset(charElements);
+              // this.playing();
+            }, 500);
           }
-          charElements[index].style.color = "red";
-          setTimeout(() => {
-            this.reset(charElements);
-            // this.playing();
-          }, 500);
         }
       },
       reset(charElements) {
@@ -220,6 +224,28 @@
           e.style.color = "lightgray";
         });
         this.charIndex = 0;
+      },
+      nextWord(charElements) {
+        if (++this.charIndex >= this.chars.length) {
+          this.text = "";
+          let nextWordIndex = ++this.wordIndex;
+
+          //展示例句
+          this.getExample();
+
+          if (nextWordIndex > this.words.length - 1) {
+            this.reset(charElements);
+            this.wordIndex = this.words.length - 1;
+            alert("恭喜练习完成!");
+            return;
+          }
+
+          setTimeout(() => {
+            this.reset(charElements);
+            this.setAboutWord(nextWordIndex);
+            this.playing();
+          }, 500);
+        }
       },
       playing() {
         this.ready()
@@ -306,13 +332,23 @@
           let inputChar;
           if (this.showInput) {
             let tempText = this.text;
-            inputChar = tempText.charAt(tempText.length - 1);
+            if (tempText == "") {
+              let charElements = document.querySelectorAll("#checkArea .char");
+              this.reset(charElements);
+              return;
+            }
+            let tempIndex = tempText.length - 1;
+            inputChar = tempText.charAt(tempIndex);
+
+            this.charIndex = tempIndex;
           } else {
             inputChar = e.key;
           }
 
           if (inputChar == "Enter") {
             this.playing();
+          } else if (inputChar == "Shift" || inputChar == "CapsLock") {
+            //do nothing
           } else {
             this.checkChar(inputChar);
           }
