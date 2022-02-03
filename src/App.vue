@@ -8,7 +8,7 @@
       </span>
     </div>
     <h4 v-if="wordObject" class="phoneticSymbols">{{ wordObject.trans }}</h4>
-    <input v-if="showInput" type="text" v-model="text" :maxlength="charsLength" />
+    <input v-if="showInput" type="text" v-model="text" placeholder="请输入上述单词" :maxlength="charsLength" />
     <div>
       美音：<input type="radio" value="0" v-model="type" @change="changeVoice" />
       英音：<input type="radio" value="1" v-model="type" @change="changeVoice" />
