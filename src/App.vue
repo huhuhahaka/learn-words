@@ -20,9 +20,11 @@
       UK：{{ wordObject.ukphone }}
     </h5>
     <div>
+      <button @click="previousOne">上一个</button>
       <input v-model.number="wordIndex" ref="wordIndex" type="number" maxlength="5" style="width: 60px"
         @change="setWordIndex" @blur="setWordIndex" />
       /{{ total }}
+      <button @click="nextOne">下一个</button>
     </div>
 
     <select v-model="dictionary" ref="selector" @change="changeDictionary">
@@ -30,8 +32,10 @@
         {{ option.text }}
       </option>
     </select>
-
-    <span v-if="showTip">按下回车 开始！</span>
+    <br />
+    <span v-if="showTip && !showInput" style="color: red;">按下对应字母按键 开始！</span>
+    <br />
+    <input type="checkbox" v-model="showExample" @change="getExample">展示例句
     <audio ref="audio" :src="audioUrl" @canplay="ready" :hidden="true"></audio>
 
     <div v-show="showQwerty">
@@ -48,7 +52,7 @@
 
     <br />
     <br />
-    <div v-html="example"></div>
+    <div v-if="showExample" v-html="example"></div>
   </div>
 </template>
 
@@ -97,6 +101,7 @@
         dictionary: defaultDictionary,
         showTip: true,
         showInput: false,
+        showExample: false,
         text: "",
         audioUrl: "",
         audioReady: false,
@@ -112,11 +117,21 @@
       },
     },
     methods: {
+      previousOne() {
+        this.wordIndex -= 1;
+        this.setWordIndex();
+      },
+      nextOne() {
+        this.wordIndex += 1;
+        this.setWordIndex();
+      },
       getExample() {
-        let word = this.words[this.wordIndex];
-        this.axios.get("https://huhuhahaka.cn/example/" + word).then((response) => {
-          this.example = response.data;
-        });
+        if (this.showExample) {
+          let word = this.words[this.wordIndex];
+          this.axios.get("https://huhuhahaka.cn/example/" + word).then((response) => {
+            this.example = response.data;
+          }); 
+        }
       },
       openQwertyUrl() {
         window.open("https://qwerty.liumingye.cn/");
