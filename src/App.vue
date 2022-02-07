@@ -118,11 +118,11 @@
     },
     methods: {
       previousOne() {
-        this.wordIndex -= 1;
+        this.wordIndex = (this.wordIndex * 1) - 1;
         this.setWordIndex();
       },
       nextOne() {
-        this.wordIndex += 1;
+        this.wordIndex = (this.wordIndex * 1) + 1;
         this.setWordIndex();
       },
       getExample() {
